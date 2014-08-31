@@ -1,0 +1,16 @@
+<h2> <%= @recipe[0]["name"]%> </h2>
+<table>
+<tr>
+<td> Description: <%= @recipe[0]["description"] %> <br><br> Instructions: <%= @recipe[0]["instructions"] %> </td>
+</tr>
+</table>
+<h4> Ingredients: </h4>
+<table>
+<tr>
+<% @recipe.each do |row| %>
+<td>
+<%= row["ingredients"] %>
+</td>
+</tr>
+<% end %>
+</table>
