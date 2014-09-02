@@ -16,18 +16,21 @@ end
 
 get '/recipes' do
   query = 'SELECT recipes.name, recipes.id FROM recipes ORDER BY recipes.name ASC'
+
   db_connection do |conn|
     @recipes = conn.exec(query)
   end
+
   erb :index
 end
 
 get '/recipes/:id' do
-  id = params[:id]
   query = "SELECT recipes.name, recipes.description AS description, recipes.instructions AS instructions, ingredients.name AS ingredients FROM recipes
-  JOIN ingredients ON ingredients.recipe_id = recipes.id WHERE recipes.id = #{id}"
+  JOIN ingredients ON ingredients.recipe_id = recipes.id WHERE recipes.id = $1"
+
   db_connection do |conn|
-    @recipe = conn.exec(query)
+    @recipe = conn.exec_params(query, [params[:id]])
   end
+
   erb :show
 end
