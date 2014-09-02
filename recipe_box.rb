@@ -24,6 +24,17 @@ def all_recipes
   recipes
 end
 
+def recipe(id)
+  query = "SELECT recipes.name, recipes.description AS description, recipes.instructions AS instructions, ingredients.name AS ingredients FROM recipes
+  JOIN ingredients ON ingredients.recipe_id = recipes.id WHERE recipes.id = $1"
+
+  recipe = db_connection do |conn|
+    conn.exec_params(query, [id])
+  end
+
+  recipe
+end
+
 get '/recipes' do
   @recipes = all_recipes
 
@@ -31,12 +42,7 @@ get '/recipes' do
 end
 
 get '/recipes/:id' do
-  query = "SELECT recipes.name, recipes.description AS description, recipes.instructions AS instructions, ingredients.name AS ingredients FROM recipes
-  JOIN ingredients ON ingredients.recipe_id = recipes.id WHERE recipes.id = $1"
-
-  db_connection do |conn|
-    @recipe = conn.exec_params(query, [params[:id]])
-  end
+  @recipe = recipe(params[:id])
 
   erb :show
 end
