@@ -4,14 +4,14 @@ require 'sinatra/reloader'
 require 'pg'
 
 def db_connection
-begin
-  connection = PG.connect(dbname: 'recipes')
+  begin
+    connection = PG.connect(dbname: 'recipes')
 
-  yield(connection)
+    yield(connection)
 
-ensure
-  connection.close
-end
+  ensure
+    connection.close
+  end
 end
 
 get '/recipes' do
