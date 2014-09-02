@@ -14,12 +14,18 @@ def db_connection
   end
 end
 
-get '/recipes' do
+def all_recipes
   query = 'SELECT recipes.name, recipes.id FROM recipes ORDER BY recipes.name ASC'
 
-  db_connection do |conn|
-    @recipes = conn.exec(query)
+  recipes = db_connection do |conn|
+    conn.exec(query)
   end
+
+  recipes
+end
+
+get '/recipes' do
+  @recipes = all_recipes
 
   erb :index
 end
